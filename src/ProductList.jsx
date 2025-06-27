@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
+
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+
+    const [addedToCart, setAddedToCart] = useState({});
 
     const plantsArray = [
         {
@@ -212,6 +215,7 @@ function ProductList({ onHomeClick }) {
             ]
         }
     ];
+
     const styleObj = {
         backgroundColor: '#4CAF50',
         color: '#fff!important',
@@ -252,6 +256,16 @@ function ProductList({ onHomeClick }) {
         e.preventDefault();
         setShowCart(false);
     };
+
+    const handleAddToCart = (plant) => {
+        dispatch(addItem(plant)); // Dispatch the action to add the plant to the cart (Redux action)
+        
+        setAddedToCart((prevState) => ({ // Update the local state to reflect that the plant has been added
+          ...prevState, // Spread the previous state to retain existing entries
+          [plant.name]: true, // Set the current plant's name as a key with value 'true' to mark it as added
+        }));
+    };
+    
     return (
         <div>
             <div className="navbar" style={styleObj}>
@@ -274,8 +288,34 @@ function ProductList({ onHomeClick }) {
             </div>
             {!showCart ? (
                 <div className="product-grid">
-
-
+                    {/* Loop through each category */}
+                    {plantsArray.map((categoryData, categoryIndex) => (
+                        <div key={categoryIndex}> {/* Unique key for each category div */}
+                            <h2>{categoryData.category}</h2> {/* Display the category name */}
+                            <div className="product-list"> {/* Container for the list of plant cards */}
+                                {/* Loop through plants within each category */}
+                                {categoryData.plants.map((plant, plantIndex) => (
+                                    <div key={plantIndex} className="product-card"> {/* Unique key for each plant card */}
+                                        <img 
+                                            src={plant.image} 
+                                            alt={plant.name} 
+                                            className="product-image" 
+                                        />
+                                        <div className="product-title">{plant.name}</div> {/* Display plant name */}
+                                        {/* Display other plant details like description and cost */}
+                                        <div className="product-description">{plant.description}</div> {/* Display plant description */}
+                                        <div className="product-cost">{plant.cost}</div> {/* Display plant cost */}
+                                        <button
+                                            className="product-button"
+                                            onClick={() => handleAddToCart(plant)} // Handle adding plant to cart
+                                        >
+                                            Add to Cart
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             ) : (
                 <CartItem onContinueShopping={handleContinueShopping} />
