@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
+import { addItem } from './CartSlice';
 
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
@@ -291,7 +292,8 @@ function ProductList({ onHomeClick }) {
                     {/* Loop through each category */}
                     {plantsArray.map((categoryData, categoryIndex) => (
                         <div key={categoryIndex}> {/* Unique key for each category div */}
-                            <h2>{categoryData.category}</h2> {/* Display the category name */}
+                            <br></br>
+                            <h2 className="category-name">{categoryData.category}</h2> {/* Display the category name */}
                             <div className="product-list"> {/* Container for the list of plant cards */}
                                 {/* Loop through plants within each category */}
                                 {categoryData.plants.map((plant, plantIndex) => (

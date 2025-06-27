@@ -40,6 +40,10 @@ body {
 }
 
 /* Product Grid */
+.category-name {
+    text-align: center;
+}
+
 .product-grid {
     display:flex;
     flex-direction: column;
